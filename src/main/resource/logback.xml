@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="log.base" value="${catalina.home:-.}/logs" />
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8">
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} -
+				%caller{0} - %msg %n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="totalAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base}/total.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+            <!-- <maxHistory>30</maxHistory> -->
+		</rollingPolicy>
+        <!-- <triggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy> -->
+		<encoder>
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} -
+				%caller{0} - %msg %n
+			</pattern>
+            <!-- <charset>UTF-8</charset> -->
+		</encoder>
+        <!-- <append>false</append>
+        <prudent>false</prudent> -->
+	</appender>
+
+	<appender name="bizAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base}/biz.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} -
+				%caller{0} - %msg %n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="errAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base}/err.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} -
+				%caller{0} - %msg %n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<logger name="com.hs" level="DEBUG" additivity="true">
+		<!-- <appender-ref ref="stdout" /> -->
+		<appender-ref ref="bizAppender" />
+		<appender-ref ref="errAppender" />
+	</logger>
+
+	<logger name="net.sf.ehcache" level="INFO">
+	</logger>
+	<logger name="org.apache.shiro" level="INFO">
+	</logger>
+    <!-- <logger name="java.sql" level="DEBUG">
+        <appender-ref ref="stdout" />
+    </logger> -->
+
+	<root level="DEBUG">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="totalAppender" />
+	</root>
+
+</configuration>
